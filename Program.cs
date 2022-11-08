@@ -17,8 +17,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DatabaseContext>(options=>
 options.UseSqlite(Configuration.GetConnectionString("DatabaseConnection")));
+
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(option=>option.IdleTimeout=TimeSpan.FromHours(2));
+builder.Services.AddSession(option=>{
+    option.IdleTimeout=TimeSpan.FromHours(2);
+    option.Cookie.Name = "DataAPI";
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options=>{
         options.TokenValidationParameters = new TokenValidationParameters(){
@@ -46,6 +50,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseCookiePolicy();
 
 app.UseSession();
 
