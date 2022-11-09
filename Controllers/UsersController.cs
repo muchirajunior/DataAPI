@@ -8,14 +8,8 @@ namespace DataAPI.Controllers;
 [Route("[controller]")]
 public class UsersController : ControllerBase
 {
-    private readonly UserManager<IdentityUser> userManager;
-    private readonly SignInManager<IdentityUser> signInManager;
 
-    public UsersController( UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
-    {
-        this.userManager = userManager;
-        this.signInManager = signInManager;
-    }
+    public UsersController(){}
 
     [HttpGet("")]
     public IActionResult GetAllUsers()
@@ -31,10 +25,8 @@ public class UsersController : ControllerBase
         return Ok();
     }
     [HttpPost("")]
-    public async Task<IActionResult> AddUser([FromBody]IdentityUser user)
-    {
-        Console.WriteLine(user.UserName);   
-        // await userManager.CreateAsync(user);
+    public  IActionResult AddUser()
+    {  
         return Ok(new {message="user created successfully"});
     }
     
