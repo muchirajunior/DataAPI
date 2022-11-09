@@ -24,6 +24,9 @@ builder.Services.AddSession(option=>{
     option.Cookie.Name = "DataAPI";
 });
 
+builder.Services.AddCors(option=>option.AddDefaultPolicy(
+    policy=>policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options=>{
         options.TokenValidationParameters = new TokenValidationParameters(){
                     ValidateIssuer = false, //set it to false if you want often change dormain names    
@@ -46,6 +49,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthentication();
 

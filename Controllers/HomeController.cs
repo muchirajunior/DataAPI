@@ -7,7 +7,7 @@ public class HomeController : Controller
 {
     public HomeController(){}
 
-    [HttpGet("Health Check")]
+    [HttpGet("")]
     public IActionResult Index()
     {
         return Ok(new {message="Data API V1", status="OK"});
