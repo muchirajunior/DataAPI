@@ -1,4 +1,5 @@
 using DataAPI.Models;
+using DataAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 //using DataAPI.Models;
@@ -8,26 +9,52 @@ namespace DataAPI.Controllers;
 [Route("[controller]")]
 public class UsersController : ControllerBase
 {
+    private readonly IUserService userService;
+    private readonly DatabaseContext databaseContext;
 
-    public UsersController(){}
+    public UsersController(IUserService userService, DatabaseContext databaseContext)
+    {
+        this.userService = userService;
+        this.databaseContext = databaseContext;
+    }
 
     [HttpGet("")]
-    public IActionResult GetAllUsers()
-    {
-        // TODO: Your code here
-        return Ok(new {message="all users in the system",data=new List<int>(){},});
-    }
+    public IActionResult GetAllUsers()=> Ok(new {message="all users in the system",data=databaseContext.Users,});
+    
     
 
     [HttpGet("{id}")]
-    public IActionResult GetUser(int id)
-    {
-        return Ok();
-    }
+    public IActionResult GetUser(int id)=> Ok(databaseContext.Users!.Where(user=>user.ID==id).FirstOrDefault());
+ 
     [HttpPost("")]
-    public  IActionResult AddUser()
+    public  IActionResult AddUser([FromBody]User user)
     {  
-        return Ok(new {message="user created successfully"});
+        dynamic? results=userService.RegisterUser(user);
+        return Ok(results);
     }
+
+    [HttpPost("login")]
+    public IActionResult LoginUser([FromBody]LoginUser user)
+    {
+        dynamic? result=userService.LoginUser(user);
+        if (result.login){
+            return Ok(result);
+        }
+
+        return BadRequest(result);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteUser(int id)
+    {
+        User? usr=databaseContext.Users!.Where(user=>user.ID==id).FirstOrDefault();
+        if (usr==null){
+            return BadRequest(new {message="failed to delete, user does not exist"});
+        }
+        databaseContext.Remove(usr);
+        databaseContext.SaveChanges();
+        return Ok(new {message="deleted user successfully"});
+    }
+    
     
 }

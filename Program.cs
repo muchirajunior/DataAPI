@@ -1,5 +1,6 @@
 using System.Text;
 using DataAPI;
+using DataAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -38,6 +39,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSettings:SignKey"]))
                 };
 });
+
+builder.Services.AddTransient<IUserService,UserServices>();
 
 var app = builder.Build();
 

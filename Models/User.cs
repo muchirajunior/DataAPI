@@ -14,6 +14,6 @@ public class User{
     public string? Password { get; set; }
     [MaxLength(100)]
     public string? Email { get; set; }
-    public bool IsVerified { get; set; }
+    public bool IsVerified { get; set; }=false;
     public Business? UserBusiness { get; set; }
 }
