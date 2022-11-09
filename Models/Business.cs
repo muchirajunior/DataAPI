@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAPI.Models;
 
@@ -11,5 +12,6 @@ public class Business{
     public List<Product>? Products { get; set; }
 
     public int UserID { get; set; }
+    [ForeignKey("UserID")]
     public User? User { get; set; }
 }

@@ -1,6 +1,8 @@
 
 using DataAPI.Models;
+using Humanizer.Bytes;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 //using DataAPI.Models;
 
 namespace DataAPI.Controllers;
@@ -16,10 +18,10 @@ public class BusinessController : Controller
     }
 
     [HttpGet("")]
-    public IActionResult GetAllBusiness()=>Ok(databaseContext.Businesses);
+    public IActionResult GetAllBusiness()=>Ok(databaseContext.Businesses!.Include(bs=>bs.Products).ToList());
 
     [HttpGet("{id}")]
-    public IActionResult GetBusinessById(int id)=>Ok(databaseContext.Businesses!.Where(bs=>bs.ID==id).FirstOrDefault());
+    public IActionResult GetBusinessById(int id)=>Ok(databaseContext.Businesses!.Where(bs=>bs.ID==id).Include(bs=>bs.Products).ToList().FirstOrDefault()  );
 
     [HttpPost("")]
     public IActionResult AddNewBusiness([FromBody]Business business)

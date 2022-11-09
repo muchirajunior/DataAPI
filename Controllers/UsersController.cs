@@ -2,6 +2,7 @@ using DataAPI.Models;
 using DataAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 //using DataAPI.Models;
 
 namespace DataAPI.Controllers;
@@ -19,12 +20,12 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("")]
-    public IActionResult GetAllUsers()=> Ok(new {message="all users in the system",data=databaseContext.Users,});
+    public IActionResult GetAllUsers()=> Ok(new {message="all users in the system",data=databaseContext.Users!.ToList(),});
     
     
 
     [HttpGet("{id}")]
-    public IActionResult GetUser(int id)=> Ok(databaseContext.Users!.Where(user=>user.ID==id).FirstOrDefault());
+    public IActionResult GetUser(int id)=> Ok(databaseContext.Users!.Where(user=>user.ID==id).Include(user=>user.UserBusiness).Include(user=>user.UserBusiness!.Products).FirstOrDefault());
  
     [HttpPost("")]
     public  IActionResult AddUser([FromBody]User user)
