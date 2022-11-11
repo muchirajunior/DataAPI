@@ -13,6 +13,7 @@ public class User{
     [Required]
     public string? Password { get; set; }
     [MaxLength(100)]
+    [EmailAddress]
     public string? Email { get; set; }
     public bool IsVerified { get; set; }=false;
     public Business? UserBusiness { get; set; }

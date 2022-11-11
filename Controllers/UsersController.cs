@@ -1,5 +1,6 @@
 using DataAPI.Models;
 using DataAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,7 @@ public class UsersController : ControllerBase
     
 
     [HttpGet("{id}")]
+    
     public IActionResult GetUser(int id)=> Ok(databaseContext.Users!.Where(user=>user.ID==id).Include(user=>user.UserBusiness).Include(user=>user.UserBusiness!.Products).FirstOrDefault());
  
     [HttpPost("")]
@@ -46,6 +48,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public IActionResult DeleteUser(int id)
     {
         User? usr=databaseContext.Users!.Where(user=>user.ID==id).FirstOrDefault();

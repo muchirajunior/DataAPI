@@ -1,9 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 using DataAPI.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DataAPI.Services;
@@ -20,8 +21,9 @@ public class UserServices  : IUserService{
     public dynamic RegisterUser(User user){
         try {
             user.Password=new PasswordHasher<Object?>().HashPassword(null,user.Password);
-            databaseContext.Add(user);
-            databaseContext.SaveChanges();
+            // databaseContext.Add(user);
+            // databaseContext.SaveChanges();
+            SendEmail(user.Email!);
             return new {complete=true,user};
         }catch (System.Exception error){
             return new {complete=false,error};
@@ -44,7 +46,21 @@ public class UserServices  : IUserService{
         }
 
         return new {login=false,error="system error !"};
-    }
+    } 
+
+    private void SendEmail(string email){  
+        try{
+           var smtpClient = new SmtpClient("smtp.gmail.com"){
+                Port = 465,//587,
+                Credentials = new NetworkCredential("nduati.muchira@s.karu.ac.ke", "37081214"),
+                EnableSsl = true,
+            };
+            smtpClient.Send("test@email.com", email, "email subject", "This is a test a email for smtp");
+            Console.WriteLine("Email sent"); 
+        }catch (System.Exception error){
+         Console.WriteLine(error);
+        }
+    }  
 
     private string GenerateJSONWebToken(User user){
         SymmetricSecurityKey? securityKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SignKey"])); 

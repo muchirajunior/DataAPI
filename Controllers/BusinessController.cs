@@ -1,6 +1,7 @@
 
 using DataAPI.Models;
 using Humanizer.Bytes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 //using DataAPI.Models;
@@ -37,6 +38,7 @@ public class BusinessController : Controller
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public IActionResult DeleteBusiness(int id)
     {
         Business? bs=databaseContext.Businesses!.Where(bs=>bs.ID==id).FirstOrDefault();
