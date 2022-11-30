@@ -9,5 +9,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.3"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3"/>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3"/>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.4"/>
   </ItemGroup>
 </Project>

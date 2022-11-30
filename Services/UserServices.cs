@@ -21,8 +21,8 @@ public class UserServices  : IUserService{
     public dynamic RegisterUser(User user){
         try {
             user.Password=new PasswordHasher<Object?>().HashPassword(null,user.Password);
-            // databaseContext.Add(user);
-            // databaseContext.SaveChanges();
+            databaseContext.Add(user);
+            databaseContext.SaveChanges();
             SendEmail(user.Email!);
             return new {complete=true,user};
         }catch (System.Exception error){
