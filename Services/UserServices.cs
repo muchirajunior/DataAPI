@@ -20,7 +20,7 @@ public class UserServices  : IUserService{
         this.configuration = configuration;
     }
 
-    public dynamic GetAllUsers()=> Results.Ok(new {message="all users in the system",data=databaseContext.Users!.ToList(),});
+    public dynamic GetAllUsers()=> Results.Ok(databaseContext.Users!.ToList());
     public dynamic GetUser(int id)=> Results.Ok(databaseContext.Users!.Where(user=>user.ID==id).Include(user=>user.UserBusiness).Include(user=>user.UserBusiness!.Products).FirstOrDefault());
     public dynamic RegisterUser(User user){
         try {
