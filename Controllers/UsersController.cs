@@ -1,10 +1,7 @@
 using DataAPI.Models;
 using DataAPI.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-//using DataAPI.Models;
 
 namespace DataAPI.Controllers;
 [ApiController]
