@@ -12,53 +12,28 @@ namespace DataAPI.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUserService userService;
-    private readonly DatabaseContext databaseContext;
 
-    public UsersController(IUserService userService, DatabaseContext databaseContext)
+    public UsersController(IUserService userService)
     {
         this.userService = userService;
-        this.databaseContext = databaseContext;
     }
 
     [HttpGet("")]
-    public IActionResult GetAllUsers()=> Ok(new {message="all users in the system",data=databaseContext.Users!.ToList(),});
-    
+    public IActionResult GetAllUsers()=> userService.GetAllUsers();
     
 
     [HttpGet("{id}")]
     
-    public IActionResult GetUser(int id)=> Ok(databaseContext.Users!.Where(user=>user.ID==id).Include(user=>user.UserBusiness).Include(user=>user.UserBusiness!.Products).FirstOrDefault());
+    public IActionResult GetUser(int id)=> userService.GetUser(id);
  
     [HttpPost("")]
-    public  IActionResult AddUser([FromBody]User user)
-    {  
-        dynamic? results=userService.RegisterUser(user);
-        return Ok(results);
-    }
+    public  IActionResult AddUser([FromBody]User user)=>userService.RegisterUser(user);
 
     [HttpPost("login")]
-    public IActionResult LoginUser([FromBody]LoginUser user)
-    {
-        dynamic? result=userService.LoginUser(user);
-        if (result.login){
-            return Ok(result);
-        }
-
-        return BadRequest(result);
-    }
+    public IActionResult LoginUser([FromBody]LoginUser user)=>userService.LoginUser(user);
 
     [HttpDelete("{id}")]
     [Authorize]
-    public IActionResult DeleteUser(int id)
-    {
-        User? usr=databaseContext.Users!.Where(user=>user.ID==id).FirstOrDefault();
-        if (usr==null){
-            return BadRequest(new {message="failed to delete, user does not exist"});
-        }
-        databaseContext.Remove(usr);
-        databaseContext.SaveChanges();
-        return Ok(new {message="deleted user successfully"});
-    }
-    
+    public IActionResult DeleteUser(int id)=>userService.DeleteUser(id);
     
 }

@@ -1,6 +1,5 @@
 using DataAPI.Models;
 using Microsoft.AspNetCore.Mvc;
-//using DataAPI.Models;
 
 namespace DataAPI.Controllers;
 
