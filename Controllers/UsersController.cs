@@ -16,21 +16,21 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("")]
-    public IActionResult GetAllUsers()=> userService.GetAllUsers();
+    public dynamic GetAllUsers()=> userService.GetAllUsers();
     
 
     [HttpGet("{id}")]
     
-    public IActionResult GetUser(int id)=> userService.GetUser(id);
+    public dynamic GetUser(int id)=> userService.GetUser(id);
  
     [HttpPost("")]
-    public  IActionResult AddUser([FromBody]User user)=>userService.RegisterUser(user);
+    public  dynamic AddUser([FromBody]User user)=>userService.RegisterUser(user);
 
     [HttpPost("login")]
-    public IActionResult LoginUser([FromBody]LoginUser user)=>userService.LoginUser(user);
+    public dynamic LoginUser([FromBody]LoginUser user)=>userService.LoginUser(user);
 
     [HttpDelete("{id}")]
     [Authorize]
-    public IActionResult DeleteUser(int id)=>userService.DeleteUser(id);
+    public dynamic DeleteUser(int id)=>userService.DeleteUser(id);
     
 }
