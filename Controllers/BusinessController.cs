@@ -46,8 +46,12 @@ public class BusinessController : Controller
         databaseContext.SaveChanges();
         return Ok(new {message="deleted business successfully"});
     }
-    
 
+    [HttpGet("{id}/products")]
+    public IActionResult GetBusinessProducts( [FromRoute] int id,[FromQuery]int number){ //number can be initialized incase of missing query parameter
+        Console.WriteLine("Query parameter number :{0}",number);
+        return Ok(databaseContext.Products!.Where(product=>product.BusinessID==id).Take(number).OrderBy(product=>product.ID).ToList());
+    }
 
     
     
