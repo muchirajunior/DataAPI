@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAPI.Models;
 
@@ -16,5 +17,6 @@ public class User{
     [EmailAddress]
     public string? Email { get; set; }
     public bool IsVerified { get; set; }=false;
+    public string? Role { get; set; }
     public Business? UserBusiness { get; set; }
 }

@@ -10,4 +10,9 @@ public class DatabaseContext : DbContext {
     public DbSet<Product>? Products { get; set; }
     public DbSet<User>? Users { get; set; }
     public DbSet<Business>? Businesses { get; set; }
+
+     protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>().HasIndex(user => user.Username).IsUnique();
+    }
 }

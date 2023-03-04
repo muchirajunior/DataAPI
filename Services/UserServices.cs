@@ -27,7 +27,7 @@ public class UserServices  : IUserService{
             user.Password=new PasswordHasher<Object?>().HashPassword(null,user.Password);
             databaseContext.Add(user);
             databaseContext.SaveChanges();
-            SendEmail(user.Email!);
+            // SendEmail(user.Email!);
             return Results.Created("",user);
         }catch (System.Exception error){
             return Results.BadRequest(new {error,message="process failed!"});
@@ -85,12 +85,13 @@ public class UserServices  : IUserService{
                 new Claim(JwtRegisteredClaimNames.UniqueName,user.Username!),
                 new Claim(JwtRegisteredClaimNames.GivenName,user.FullName!),
                 new Claim(JwtRegisteredClaimNames.Email,user.Email!),
-                new Claim("sub","") //for python apis
+                new Claim(ClaimTypes.Role,"Manager"),
+                new Claim(JwtRegisteredClaimNames.Sub,""),//for python APIs
             };
 
         JwtSecurityToken? token = new JwtSecurityToken(
-                        issuer: configuration["Jwt:validIssuer"],   
-                        audience: configuration["Jwt:validAudience"],   
+                        issuer: configuration["JwtSettings:validIssuer"],   
+                        audience: configuration["JwtSettings:validAudience"],   
                         claims: AuthClaims,
                         expires: DateTime.Now.AddMinutes(120),    
                         signingCredentials: credentials

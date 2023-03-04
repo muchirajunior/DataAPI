@@ -3,6 +3,7 @@ using DataAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace DataAPI.Controllers;
 [ApiController]
 [Route("[controller]")]
@@ -15,7 +16,7 @@ public class UsersController : ControllerBase
         this.userService = userService;
     }
 
-    [HttpGet("")]
+    [HttpGet(""),MapToApiVersion("2.0")]
     public dynamic GetAllUsers()=> userService.GetAllUsers();
     
 
@@ -30,7 +31,7 @@ public class UsersController : ControllerBase
     public dynamic LoginUser([FromBody]LoginUser user)=>userService.LoginUser(user);
 
     [HttpDelete("{id}")]
-    [Authorize]
+    [Authorize(Roles="Admin,Manager")]
     public dynamic DeleteUser(int id)=>userService.DeleteUser(id);
     
 }
