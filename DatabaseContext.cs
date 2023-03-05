@@ -13,6 +13,12 @@ public class DatabaseContext : DbContext {
 
      protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>().HasIndex(user => user.Username).IsUnique();
+        try {
+           modelBuilder.Entity<User>().HasIndex(user => user.Username).IsUnique(); 
+        }catch (System.Exception){
+            
+            Console.WriteLine("error :");
+        }
+        
     }
 }

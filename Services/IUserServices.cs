@@ -1,12 +1,13 @@
 using DataAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DataAPI.Services;
 
 public interface IUserService
 {
-    dynamic GetAllUsers();
-    dynamic GetUser(int id);
-    dynamic RegisterUser(User user);
-    dynamic LoginUser(LoginUser user);
-    dynamic DeleteUser(int id);
+    IActionResult GetAllUsers();
+    IActionResult GetUser(int id);
+    IActionResult RegisterUser(User user);
+    IActionResult LoginUser(LoginUser user);
+    IActionResult DeleteUser(int id);
 }

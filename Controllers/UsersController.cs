@@ -16,22 +16,22 @@ public class UsersController : ControllerBase
         this.userService = userService;
     }
 
-    [HttpGet(""),MapToApiVersion("2.0")]
-    public dynamic GetAllUsers()=> userService.GetAllUsers();
+    [HttpGet("")]
+    public IActionResult GetAllUsers()=> userService.GetAllUsers();
     
 
     [HttpGet("{id}")]
     
-    public dynamic GetUser(int id)=> userService.GetUser(id);
+    public IActionResult GetUser(int id)=> userService.GetUser(id);
  
     [HttpPost("")]
-    public  dynamic AddUser([FromBody]User user)=>userService.RegisterUser(user);
+    public  IActionResult AddUser([FromBody]User user)=>userService.RegisterUser(user);
 
     [HttpPost("login")]
-    public dynamic LoginUser([FromBody]LoginUser user)=>userService.LoginUser(user);
+    public IActionResult LoginUser([FromBody]LoginUser user)=>userService.LoginUser(user);
 
     [HttpDelete("{id}")]
     [Authorize(Roles="Admin,Manager")]
-    public dynamic DeleteUser(int id)=>userService.DeleteUser(id);
+    public IActionResult DeleteUser(int id)=>userService.DeleteUser(id);
     
 }
