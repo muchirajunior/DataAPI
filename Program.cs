@@ -37,7 +37,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
                     ValidateIssuerSigningKey = true,    
                     ValidIssuer = Configuration["JwtSettings:validIssuer"],    
                     ValidAudience = Configuration["JwtSettings:ValidAudience"],    
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSettings:SignKey"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSettings:SignKey"]!))
                 };
 });
 
@@ -56,6 +56,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors();
+
+app.UseExceptionHandler("/error");
 
 app.UseAuthentication();
 

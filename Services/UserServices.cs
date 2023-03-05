@@ -31,8 +31,8 @@ public class UserServices  : IUserService{
             databaseContext.SaveChanges();
             // SendEmail(user.Email!);
             return new CreatedResult("",user);
-        }catch (System.Exception error){
-            return new BadRequestObjectResult(new {error.Message,message="process failed!"});
+        }catch (Exception error){
+            return new BadRequestObjectResult(new {message="failed to update", error=error.InnerException!.ToString()});
         }
 
     }
@@ -40,7 +40,7 @@ public class UserServices  : IUserService{
     public IActionResult LoginUser(LoginUser loginUser){
         User? user = databaseContext.Users!.Where(usr=> usr.Username==loginUser.Username).FirstOrDefault();
         if (user==null){
-            return new NotFoundObjectResult(new {login=false,error="user does not exist in the system"});
+            return new NotFoundObjectResult(new {login=false,message="user does not exist in the system"});
         }
         PasswordVerificationResult result=new PasswordHasher<Object?>().VerifyHashedPassword(null,user.Password,loginUser.Password);
         if (result==PasswordVerificationResult.Success){
@@ -48,10 +48,10 @@ public class UserServices  : IUserService{
         }
 
         if(result==PasswordVerificationResult.Failed){
-            return new BadRequestObjectResult(new {login=false,error="incorrect password !"});
+            return new BadRequestObjectResult(new {login=false,message="incorrect password !"});
         }
 
-        return new BadRequestObjectResult(new  {login=false,error="system error !"});
+        return new BadRequestObjectResult(new  {login=false,message="system error !"});
     } 
 
     public IActionResult DeleteUser(int id){
@@ -68,7 +68,7 @@ public class UserServices  : IUserService{
         try{
            var smtpClient = new SmtpClient("smtp.gmail.com"){
                 Port = 465,//587,
-                Credentials = new NetworkCredential("nduati.muchira@s.karu.ac.ke", "37081214"),
+                Credentials = new NetworkCredential("nduati.muchira@s.karu.ac.ke", "*****"),
                 EnableSsl = true,
             };
             smtpClient.Send("test@email.com", email, "email subject", "This is a test a email for smtp");
@@ -79,7 +79,7 @@ public class UserServices  : IUserService{
     }  
 
     private string GenerateJSONWebToken(User user){
-        SymmetricSecurityKey? securityKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SignKey"])); 
+        SymmetricSecurityKey securityKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SignKey"]!)); 
         SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);  
 
         List<Claim> AuthClaims=new List<Claim>{

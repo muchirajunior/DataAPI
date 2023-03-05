@@ -12,4 +12,8 @@ public class HomeController : Controller
     {
         return Ok(new {message="Data API V1", status="OK"});
     }
+
+    [HttpGet("error")]
+    public IActionResult ErrorPage()=> BadRequest(new {message="error occurred  !!"});
+    
 }
