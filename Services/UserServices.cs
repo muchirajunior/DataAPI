@@ -23,8 +23,9 @@ public class UserServices  : IUserService{
 
     public IActionResult GetAllUsers()=> new OkObjectResult(databaseContext.Users!.ToList());
     public IActionResult GetUser(int id)=> new OkObjectResult(databaseContext.Users!.Where(user=>user.ID==id).Include(user=>user.UserBusiness).Include(user=>user.UserBusiness!.Products).FirstOrDefault());
-    public IActionResult RegisterUser(User user){
+    public IActionResult RegisterUser(RegisterUser registerUser){
         try {
+            User user=new User(){FullName=registerUser.Name, Password=registerUser.Password,Username=registerUser.Username,Role=registerUser.Role,Email=registerUser.Email};
             user.Password=new PasswordHasher<Object?>().HashPassword(null,user.Password);
             databaseContext.Add(user);
             databaseContext.SaveChanges();

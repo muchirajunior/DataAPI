@@ -18,6 +18,7 @@ public class User{
     [EmailAddress]
     public string? Email { get; set; }
     public bool IsVerified { get; set; }=false;
+    [Required]
     public string? Role { get; set; }
     public Business? UserBusiness { get; set; }
 }

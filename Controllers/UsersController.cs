@@ -25,7 +25,7 @@ public class UsersController : ControllerBase
     public IActionResult GetUser(int id)=> userService.GetUser(id);
  
     [HttpPost("")]
-    public  IActionResult AddUser([FromBody]User user)=>userService.RegisterUser(user);
+    public  IActionResult AddUser([FromBody]RegisterUser registerUser)=>userService.RegisterUser(registerUser);
 
     [HttpPost("login")]
     public IActionResult LoginUser([FromBody]LoginUser user)=>userService.LoginUser(user);

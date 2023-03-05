@@ -7,7 +7,7 @@ public interface IUserService
 {
     IActionResult GetAllUsers();
     IActionResult GetUser(int id);
-    IActionResult RegisterUser(User user);
+    IActionResult RegisterUser(RegisterUser registerUser);
     IActionResult LoginUser(LoginUser user);
     IActionResult DeleteUser(int id);
 }
