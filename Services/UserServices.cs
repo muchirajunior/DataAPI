@@ -31,7 +31,7 @@ public class UserServices  : IUserService{
             User user=new User(){FullName=registerUser.Name, Password=registerUser.Password,Username=registerUser.Username,Role=registerUser.Role,Email=registerUser.Email};
             user.Password=new PasswordHasher<Object?>().HashPassword(null,user.Password);
             databaseContext.Add(user);
-            // databaseContext.SaveChanges();
+            databaseContext.SaveChanges();
             SendEmail(user.Email!);
             return new CreatedResult("",user);
         }catch (Exception error){
