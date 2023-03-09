@@ -21,15 +21,18 @@ public class UserServices  : IUserService{
         this.configuration = configuration;
     }
 
-    public IActionResult GetAllUsers()=> new OkObjectResult(databaseContext.Users!.ToList());
+    public IActionResult GetAllUsers(){
+        
+        return new OkObjectResult(databaseContext.Users!.ToList());
+    }
     public IActionResult GetUser(int id)=> new OkObjectResult(databaseContext.Users!.Where(user=>user.ID==id).Include(user=>user.UserBusiness).Include(user=>user.UserBusiness!.Products).FirstOrDefault());
     public IActionResult RegisterUser(RegisterUser registerUser){
         try {
             User user=new User(){FullName=registerUser.Name, Password=registerUser.Password,Username=registerUser.Username,Role=registerUser.Role,Email=registerUser.Email};
             user.Password=new PasswordHasher<Object?>().HashPassword(null,user.Password);
             databaseContext.Add(user);
-            databaseContext.SaveChanges();
-            // SendEmail(user.Email!);
+            // databaseContext.SaveChanges();
+            SendEmail(user.Email!);
             return new CreatedResult("",user);
         }catch (Exception error){
             return new BadRequestObjectResult(new {message="failed to update", error=error.InnerException!.ToString()});
@@ -66,13 +69,19 @@ public class UserServices  : IUserService{
 
     private void SendEmail(string email){  
         try{
-           var smtpClient = new SmtpClient("smtp.gmail.com"){
-                Port = 465,//587,
-                Credentials = new NetworkCredential("nduati.muchira@s.karu.ac.ke", "*****"),
-                EnableSsl = true,
-            };
-            smtpClient.Send("test@email.com", email, "email subject", "This is a test a email for smtp");
-            Console.WriteLine("Email sent"); 
+            MailMessage message = new MailMessage();
+
+            message.From = new MailAddress("non-reply@biashara.buzz");
+            message.To.Add(email);
+
+            message.Subject = "User message";
+            message.Body = "Hello User.\n This is a test message sent using SMTP in .NET. The service is running on truehost Service. \n Thank You";
+
+            SmtpClient smtpClient = new SmtpClient("****.truehost.cloud");
+
+            smtpClient.Credentials = new NetworkCredential("non-reply@biashara.buzz", "*****");
+
+            smtpClient.Send(message);
         }catch (System.Exception error){
          Console.WriteLine(error);
         }
