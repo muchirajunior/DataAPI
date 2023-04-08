@@ -12,8 +12,8 @@ public class DatabaseContext : DbContext {
     public DbSet<Order>? Orders { get; set; }
     public DbSet<OrderProduct>? OrderProducts { get; set; } //junction table
 
-     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    protected override void OnModelCreating(ModelBuilder modelBuilder){
+        
         modelBuilder.Entity<User>().HasIndex(user => user.Username).IsUnique(); 
         
         modelBuilder.Entity<Order>() .HasMany(order=> order.Products).WithMany(product=>product.Orders).UsingEntity<OrderProduct>();
