@@ -12,4 +12,5 @@ public class Product{
     public int BusinessID { get; set; }
     [ForeignKey("BusinessID")]
     public Business? Business { get; set; }
+    public List<Order>? Orders { get; set; }
 }

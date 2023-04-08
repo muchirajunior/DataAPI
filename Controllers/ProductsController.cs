@@ -1,5 +1,6 @@
 using DataAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAPI.Controllers;
 
@@ -17,7 +18,7 @@ public class ProductsController : Controller
     public IActionResult GetAllProducts()=>Ok(databaseContext.Products);
 
     [HttpGet("{id}")]
-    public IActionResult GetProductById(int id)=>Ok(databaseContext.Products!.Where(product=>product.ID==id).FirstOrDefault());
+    public IActionResult GetProductById(int id)=>Ok(databaseContext.Products!.Where(product=>product.ID==id).Include(product=>product.Orders).FirstOrDefault());
 
     [HttpPost("")]
     public IActionResult AddNewProduct([FromBody]Product product)
