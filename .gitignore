@@ -9,6 +9,8 @@
 *.user
 *.userosscache
 *.sln.docstates
+
+#sqlite genarated files
 *.db-shm
 *.db-wal
 
