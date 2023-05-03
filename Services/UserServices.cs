@@ -71,15 +71,15 @@ public class UserServices  : IUserService{
         try{
             MailMessage message = new MailMessage();
 
-            message.From = new MailAddress("non-reply@biashara.buzz");
+            message.From = new MailAddress("non-reply@dormain.com");
             message.To.Add(email);
 
             message.Subject = "User message";
-            message.Body = "Hello User.\n This is a test message sent using SMTP in .NET. The service is running on truehost Service. \n Thank You";
+            message.Body = "Hello User.\n This is a test message sent using SMTP in .NET. \n Thank You";
 
-            SmtpClient smtpClient = new SmtpClient("****.truehost.cloud");
+            SmtpClient smtpClient = new SmtpClient("smtp.server.cloud");
 
-            smtpClient.Credentials = new NetworkCredential("non-reply@biashara.buzz", "*****");
+            smtpClient.Credentials = new NetworkCredential("non-reply@dormain.com", "password");
 
             smtpClient.Send(message);
         }catch (System.Exception error){
