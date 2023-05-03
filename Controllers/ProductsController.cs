@@ -15,6 +15,7 @@ public class ProductsController : Controller
     }
 
     [HttpGet("")]
+    [ResponseCache(Duration=30)]
     public IActionResult GetAllProducts()=>Ok(databaseContext.Products!.Select(product=>new {name=product.Name,price=product.Price,quantity=product.Quantity}).ToList());
 
     [HttpGet("{id}")]
