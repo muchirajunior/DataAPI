@@ -15,7 +15,7 @@ public class ProductsController : Controller
     }
 
     [HttpGet("")]
-    public IActionResult GetAllProducts()=>Ok(databaseContext.Products);
+    public IActionResult GetAllProducts()=>Ok(databaseContext.Products!.Select(product=>new {name=product.Name,price=product.Price,quantity=product.Quantity}).ToList());
 
     [HttpGet("{id}")]
     public IActionResult GetProductById(int id)=>Ok(databaseContext.Products!.Where(product=>product.ID==id).Include(product=>product.Orders).FirstOrDefault());
