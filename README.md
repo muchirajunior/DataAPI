@@ -25,3 +25,7 @@
 ```C#
     builder.Services.AddControllers().AddJsonOptions(x =>x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 ```
+
+
+### Published
+ https://documenter.getpostman.com/view/17338944/2s93sc5Yi1#2e733d89-f0f1-40eb-aa15-d7676e0d19ec
