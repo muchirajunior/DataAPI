@@ -1,4 +1,4 @@
-using DataAPI.Models;
+using DataAPI.Data;
 using DataAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

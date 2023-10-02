@@ -1,4 +1,4 @@
-using DataAPI.Models;
+using DataAPI.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DataAPI.Services;

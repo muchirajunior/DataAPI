@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DataAPI.Models;
+namespace DataAPI.Data;
 
 public class RegisterUser{
     public string? Name { get; set; }

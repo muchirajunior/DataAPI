@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
+using DataAPI.Data;
 using DataAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ public class UserServices  : IUserService{
         
         return new OkObjectResult(databaseContext.Users!.ToList());
     }
-    public IActionResult GetUser(int id)=> new OkObjectResult(databaseContext.Users!.Where(user=>user.ID==id).Include(user=>user.UserBusiness).Include(user=>user.UserBusiness!.Products).FirstOrDefault());
+    public IActionResult GetUser(int id)=> new OkObjectResult(databaseContext.Users!.Where(user=>user.Id==id).Include(user=>user.UserBusiness).Include(user=>user.UserBusiness!.Products).FirstOrDefault());
     public IActionResult RegisterUser(RegisterUser registerUser){
         try {
             User user=new User(){FullName=registerUser.Name, Password=registerUser.Password,Username=registerUser.Username,Role=registerUser.Role,Email=registerUser.Email};
@@ -58,7 +59,7 @@ public class UserServices  : IUserService{
     } 
 
     public IActionResult DeleteUser(int id){
-        User? usr=databaseContext.Users!.Where(user=>user.ID==id).FirstOrDefault();
+        User? usr=databaseContext.Users!.Where(user=>user.Id==id).FirstOrDefault();
         if (usr==null){
             return new BadRequestObjectResult(new {message="failed to delete, user does not exist"});
         }

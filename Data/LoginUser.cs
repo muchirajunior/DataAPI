@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DataAPI.Services;
+namespace DataAPI.Data;
 
 public class LoginUser{
     [Required]
