@@ -16,10 +16,17 @@ public class BusinessController : Controller
     }
 
     [HttpGet("")]
-    public IActionResult GetAllBusiness()=>Ok(databaseContext.Businesses!.Include(bs=>bs.Products).ToList());
+    public IActionResult GetAllBusiness()=>Ok(databaseContext.Businesses!.ToList());
 
     [HttpGet("{id}")]
-    public IActionResult GetBusinessById(int id)=>Ok(databaseContext.Businesses!.Where(bs=>bs.ID==id).Include(bs=>bs.Products).ToList().FirstOrDefault()  );
+    public IActionResult GetBusinessById(int id){
+        var business=databaseContext.Businesses!.Where(bs=>bs.Id==id).Include(bs=>bs.Products).Include(bs=>bs.Customers)
+             .Include(bs=>bs.Users).ToList().FirstOrDefault();
+        if(business==null){
+            return NotFound(new {message="business with such id does not exist"});
+        }
+        return Ok(business);
+    }
 
     [HttpPost("")]
     public IActionResult AddNewBusiness([FromBody]Business business)
@@ -38,7 +45,7 @@ public class BusinessController : Controller
     [Authorize]
     public IActionResult DeleteBusiness(int id)
     {
-        Business? bs=databaseContext.Businesses!.Where(bs=>bs.ID==id).FirstOrDefault();
+        Business? bs=databaseContext.Businesses!.Where(bs=>bs.Id==id).FirstOrDefault();
         if (bs==null){
             return BadRequest(new {message="failed to delete, business does not exist"});
         }
@@ -53,7 +60,4 @@ public class BusinessController : Controller
         return Ok(databaseContext.Products!.Where(product=>product.BusinessID==id).Take(number).OrderBy(product=>product.ID).ToList());
     }
 
-    
-    
-    
 }
