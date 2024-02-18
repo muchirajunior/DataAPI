@@ -30,7 +30,7 @@ public class UserServices  : IUserService{
     public IActionResult RegisterUser(RegisterUser registerUser){
         try {
             User user=new User(){FullName=registerUser.Name, Password=registerUser.Password,Username=registerUser.Username,Role=registerUser.Role,Email=registerUser.Email};
-            user.Password=new PasswordHasher<Object?>().HashPassword(null,user.Password);
+            user.Password=new PasswordHasher<Object>().HashPassword(user,user.Password!);
             databaseContext.Add(user);
             databaseContext.SaveChanges();
             SendEmail(user.Email!);
@@ -46,7 +46,7 @@ public class UserServices  : IUserService{
         if (user==null){
             return new NotFoundObjectResult(new {login=false,message="user does not exist in the system"});
         }
-        PasswordVerificationResult result=new PasswordHasher<Object?>().VerifyHashedPassword(null,user.Password,loginUser.Password);
+        PasswordVerificationResult result=new PasswordHasher<Object>().VerifyHashedPassword(user,user.Password!,loginUser.Password!);
         if (result==PasswordVerificationResult.Success){
             return new OkObjectResult(new {login=true,user,token=GenerateJSONWebToken(user)});
         }
