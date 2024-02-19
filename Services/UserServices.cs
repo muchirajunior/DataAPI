@@ -29,14 +29,22 @@ public class UserServices  : IUserService{
     public IActionResult GetUser(int id)=> new OkObjectResult(databaseContext.Users!.Where(user=>user.Id==id).Include(user=>user.UserBusiness).Include(user=>user.UserBusiness!.Products).FirstOrDefault());
     public IActionResult RegisterUser(RegisterUser registerUser){
         try {
-            User user=new User(){FullName=registerUser.Name, Password=registerUser.Password,Username=registerUser.Username,Role=registerUser.Role,Email=registerUser.Email};
+            User user=new(){ 
+                FullName=registerUser.Name, 
+                Password=registerUser.Password,
+                Username=registerUser.Username,
+                Role=registerUser.Role,
+                Email=registerUser.Email,
+                BusinessId=registerUser.BusinessId
+            };
             user.Password=new PasswordHasher<Object>().HashPassword(user,user.Password!);
             databaseContext.Add(user);
             databaseContext.SaveChanges();
-            SendEmail(user.Email!);
+            // SendEmail(user.Email!);
             return new CreatedResult("",user);
         }catch (Exception error){
-            return new BadRequestObjectResult(new {message="failed to update", error=error.InnerException!.ToString()});
+            Console.WriteLine(error);
+            return new BadRequestObjectResult(new {message="failed to create", error=error.InnerException!.ToString()});
         }
 
     }
@@ -89,17 +97,17 @@ public class UserServices  : IUserService{
     }  
 
     private string GenerateJSONWebToken(User user){
-        SymmetricSecurityKey securityKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SignKey"]!)); 
-        SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);  
+        SymmetricSecurityKey securityKey= new(Encoding.UTF8.GetBytes(configuration["JwtSettings:SignKey"]!)); 
+        SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha256);  
 
-        List<Claim> AuthClaims=new List<Claim>{
+        List<Claim> AuthClaims=[
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName,user.Username!),
                 new Claim(JwtRegisteredClaimNames.GivenName,user.FullName!),
                 new Claim(JwtRegisteredClaimNames.Email,user.Email!),
                 new Claim(ClaimTypes.Role,user.Role!),
                 new Claim(JwtRegisteredClaimNames.Sub,""),//for python APIs
-            };
+            ];
 
         JwtSecurityToken? token = new JwtSecurityToken(
                         issuer: configuration["JwtSettings:validIssuer"],   

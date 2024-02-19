@@ -11,4 +11,6 @@ public class RegisterUser{
     public string? Email { get; set; }
     [Required]
     public string? Role { get; set; }
+    [Required]
+    public int BusinessId { get; set; }
 }
