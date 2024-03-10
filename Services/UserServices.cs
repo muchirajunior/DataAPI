@@ -32,7 +32,6 @@ public class UserServices  : IUserService{
             User user=new(){ 
                 FullName=registerUser.Name, 
                 Password=registerUser.Password,
-                Username=registerUser.Username,
                 Role=registerUser.Role,
                 Email=registerUser.Email,
                 BusinessId=registerUser.BusinessId
@@ -50,7 +49,7 @@ public class UserServices  : IUserService{
     }
 
     public IActionResult LoginUser(LoginUser loginUser){
-        User? user = databaseContext.Users!.Where(usr=> usr.Username==loginUser.Username).FirstOrDefault();
+        User? user = databaseContext.Users!.Where(usr=> usr.Email==loginUser.Username).FirstOrDefault();
         if (user==null){
             return new NotFoundObjectResult(new {login=false,message="user does not exist in the system"});
         }
@@ -102,7 +101,7 @@ public class UserServices  : IUserService{
 
         List<Claim> AuthClaims=[
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName,user.Username!),
+                new Claim(JwtRegisteredClaimNames.UniqueName,user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.GivenName,user.FullName!),
                 new Claim(JwtRegisteredClaimNames.Email,user.Email!),
                 new Claim(ClaimTypes.Role,user.Role!),

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAPI", "DataAPI.csproj", "{7139502E-3B48-45E0-ACB4-1E173E8CC364}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAPI", "DataAPI.csproj", "{7D6F3A00-DC63-42CA-973D-23CB7701C813}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7139502E-3B48-45E0-ACB4-1E173E8CC364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7139502E-3B48-45E0-ACB4-1E173E8CC364}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7139502E-3B48-45E0-ACB4-1E173E8CC364}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7139502E-3B48-45E0-ACB4-1E173E8CC364}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D6F3A00-DC63-42CA-973D-23CB7701C813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D6F3A00-DC63-42CA-973D-23CB7701C813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D6F3A00-DC63-42CA-973D-23CB7701C813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D6F3A00-DC63-42CA-973D-23CB7701C813}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {2DA36481-0A6B-49F5-A05D-557E8FFF9703}
+		SolutionGuid = {14FAB118-E8F0-43D1-BD96-E04358ADA038}
 	EndGlobalSection
 EndGlobal

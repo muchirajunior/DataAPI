@@ -9,9 +9,6 @@ public class User{
     public int Id { get; set; }
     [MaxLength(200)]
     public string? FullName { get; set; }
-    [MaxLength(100)]
-    [Required]
-    public string? Username { get; set; }
     [Required]
     [JsonIgnore]
     public string? Password { get; set; }

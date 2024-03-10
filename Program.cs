@@ -34,17 +34,18 @@ builder.Services.AddCors(option=>option.AddDefaultPolicy(
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options=>{
         options.TokenValidationParameters = new TokenValidationParameters(){
-                    ValidateIssuer = false, //set it to false if you want often change dormain names    
-                    ValidateAudience = true,    
-                    ValidateLifetime = true,    
-                    ValidateIssuerSigningKey = true,    
-                    ValidIssuer = Configuration["JwtSettings:validIssuer"],    
-                    ValidAudience = Configuration["JwtSettings:ValidAudience"],    
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSettings:SignKey"]!))
-                };
+            ValidateIssuer = false, //set it to false if you want often change dormain names    
+            ValidateAudience = true,    
+            ValidateLifetime = true,    
+            ValidateIssuerSigningKey = true,    
+            ValidIssuer = Configuration["JwtSettings:validIssuer"],    
+            ValidAudience = Configuration["JwtSettings:ValidAudience"],    
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSettings:SignKey"]!))
+        };
 });
 
 builder.Services.AddTransient<IUserService,UserServices>();
+builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddControllers().AddJsonOptions(x =>x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
