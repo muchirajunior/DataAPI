@@ -16,6 +16,7 @@ public class BusinessController : Controller
     }
 
     [HttpGet("")]
+    [Authorize]
     public IActionResult GetAllBusiness()=>Ok(databaseContext.Businesses!.ToList());
 
     [HttpGet("{id}")]

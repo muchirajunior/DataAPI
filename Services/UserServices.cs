@@ -27,6 +27,8 @@ public class UserServices  : IUserService{
         return new OkObjectResult(databaseContext.Users!.ToList());
     }
     public IActionResult GetUser(int id)=> new OkObjectResult(databaseContext.Users!.Where(user=>user.Id==id).Include(user=>user.UserBusiness).Include(user=>user.UserBusiness!.Products).FirstOrDefault());
+
+    public User? FetchUser(string email)=> databaseContext.Users.Where((user)=>user.Email == email).FirstOrDefault();
     public IActionResult RegisterUser(RegisterUser registerUser){
         try {
             User user=new(){ 
@@ -49,12 +51,14 @@ public class UserServices  : IUserService{
     }
 
     public IActionResult LoginUser(LoginUser loginUser){
-        User? user = databaseContext.Users!.Where(usr=> usr.Email==loginUser.Username).FirstOrDefault();
+        User? user = databaseContext.Users!.Where(usr=> usr.Email==loginUser.Email).FirstOrDefault();
         if (user==null){
             return new NotFoundObjectResult(new {login=false,message="user does not exist in the system"});
         }
         PasswordVerificationResult result=new PasswordHasher<Object>().VerifyHashedPassword(user,user.Password!,loginUser.Password!);
         if (result==PasswordVerificationResult.Success){
+            user.SecurityStamp = Guid.NewGuid().ToString();
+            databaseContext.SaveChanges();
             return new OkObjectResult(new {login=true,user,token=GenerateJSONWebToken(user)});
         }
 
@@ -100,11 +104,12 @@ public class UserServices  : IUserService{
         SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha256);  
 
         List<Claim> AuthClaims=[
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, user.SecurityStamp),
                 new Claim(JwtRegisteredClaimNames.UniqueName,user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.GivenName,user.FullName!),
                 new Claim(JwtRegisteredClaimNames.Email,user.Email!),
                 new Claim(ClaimTypes.Role,user.Role!),
+                new Claim(ClaimTypes.Version,user.SecurityStamp),
                 new Claim(JwtRegisteredClaimNames.Sub,""),//for python APIs
             ];
 

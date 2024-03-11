@@ -44,8 +44,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         };
 });
 
-builder.Services.AddTransient<IUserService,UserServices>();
-builder.Services.AddScoped<IAuthService,AuthService>();
+builder.Services.AddScoped<IUserService,UserServices>();
+// builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddControllers().AddJsonOptions(x =>x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
@@ -56,6 +56,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
 
 app.UseHttpsRedirection();
 
@@ -74,5 +76,7 @@ app.UseSession();
 app.UseResponseCaching();
 
 app.MapControllers();
+
+// app.UseJwtValidation();
 
 app.Run();

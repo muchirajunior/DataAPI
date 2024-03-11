@@ -18,6 +18,7 @@ public class User{
     public bool IsVerified { get; set; }=false;
     [Required]
     public string? Role { get; set; }
+    public string SecurityStamp { get; set; }=  Guid.NewGuid().ToString();
     public int BusinessId { get; set; }
     [ForeignKey("BusinessId")]
     public Business? UserBusiness { get; set; }
