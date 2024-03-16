@@ -36,7 +36,7 @@ builder.Services.AddCors(option=>option.AddDefaultPolicy(
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
     options=>{
         options.TokenValidationParameters = new TokenValidationParameters(){
-            ValidateIssuer = false, //set it to false if you want often change dormain names    
+            ValidateIssuer = false,   
             ValidateAudience = true,    
             ValidateLifetime = true,    
             ValidateIssuerSigningKey = true,    
@@ -51,9 +51,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
             var securityStamp = context.Principal!.FindFirstValue(ClaimTypes.SerialNumber); // use the claim for security stamp
             var user = await _context.Users.Where((user)=>user.Email == email).FirstOrDefaultAsync();
             if(user== null || (user.SecurityStamp != securityStamp )){
-                context.Fail("Inavild Security Stamp");
+                context.Fail("Invaild Security Stamp");
             }
-            
+            //and any other checks for user
         }
     };
 });
@@ -90,7 +90,5 @@ app.UseSession();
 app.UseResponseCaching();
 
 app.MapControllers();
-
-// app.UseJwtValidation();
 
 app.Run();
