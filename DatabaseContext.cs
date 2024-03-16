@@ -15,6 +15,11 @@ public class DatabaseContext : DbContext {
     public DbSet<IdentityUser> IdentityUsers { get; set; }
     public DbSet<OrderProduct> OrderProducts { get; set; } //junction table
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){
+        optionsBuilder.UseSqlite("Data Source=Database.db;"); // Replace with your actual connection string
+    }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder){
         
         modelBuilder.Entity<User>().HasIndex(user => user.Email).IsUnique(); 

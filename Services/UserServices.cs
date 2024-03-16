@@ -28,7 +28,6 @@ public class UserServices  : IUserService{
     }
     public IActionResult GetUser(int id)=> new OkObjectResult(databaseContext.Users!.Where(user=>user.Id==id).Include(user=>user.UserBusiness).Include(user=>user.UserBusiness!.Products).FirstOrDefault());
 
-    public User? FetchUser(string email)=> databaseContext.Users.Where((user)=>user.Email == email).FirstOrDefault();
     public IActionResult RegisterUser(RegisterUser registerUser){
         try {
             User user=new(){ 
@@ -109,7 +108,7 @@ public class UserServices  : IUserService{
                 new Claim(JwtRegisteredClaimNames.GivenName,user.FullName!),
                 new Claim(JwtRegisteredClaimNames.Email,user.Email!),
                 new Claim(ClaimTypes.Role,user.Role!),
-                new Claim(ClaimTypes.Version,user.SecurityStamp),
+                new Claim(ClaimTypes.SerialNumber,user.SecurityStamp),
                 new Claim(JwtRegisteredClaimNames.Sub,""),//for python APIs
             ];
 

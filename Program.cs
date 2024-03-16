@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 using DataAPI;
@@ -32,7 +33,8 @@ builder.Services.AddSession(option=>{
 builder.Services.AddCors(option=>option.AddDefaultPolicy(
     policy=>policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options=>{
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    options=>{
         options.TokenValidationParameters = new TokenValidationParameters(){
             ValidateIssuer = false, //set it to false if you want often change dormain names    
             ValidateAudience = true,    
@@ -42,6 +44,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
             ValidAudience = Configuration["JwtSettings:ValidAudience"],    
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSettings:SignKey"]!))
         };
+    options.Events = new JwtBearerEvents{
+        OnTokenValidated = async context =>{
+            DatabaseContext _context = new DatabaseContext();
+            var email = context.Principal!.FindFirstValue(ClaimTypes.Email);
+            var securityStamp = context.Principal!.FindFirstValue(ClaimTypes.SerialNumber); // use the claim for security stamp
+            var user = await _context.Users.Where((user)=>user.Email == email).FirstOrDefaultAsync();
+            if(user== null || (user.SecurityStamp != securityStamp )){
+                context.Fail("Inavild Security Stamp");
+            }
+            
+        }
+    };
 });
 
 builder.Services.AddScoped<IUserService,UserServices>();
