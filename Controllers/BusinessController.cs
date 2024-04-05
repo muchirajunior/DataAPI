@@ -21,8 +21,9 @@ public class BusinessController : Controller
 
     [HttpGet("{id}")]
     public IActionResult GetBusinessById(int id){
-        var business=databaseContext.Businesses!.Where(bs=>bs.Id==id).Include(bs=>bs.Products).Include(bs=>bs.Customers)
-             .Include(bs=>bs.Users).ToList().FirstOrDefault();
+        var business=databaseContext.Businesses!.Where(bs=>bs.Id==id)
+            .Include(bs=>bs.Products).Include(bs=>bs.Customers)
+            .Include(bs=>bs.Users).ToList().FirstOrDefault();
         if(business==null){
             return NotFound(new {message="business with such id does not exist"});
         }
@@ -35,9 +36,9 @@ public class BusinessController : Controller
         try {
             databaseContext.Businesses!.Add(business);
             databaseContext.SaveChanges();
-            return Created("business",new {message="created item success",business}); 
+            return Created("business",new {message="created successfully",business}); 
          }catch (System.Exception error){
-            return BadRequest(new {message="failed to add new buiness",error});
+            return BadRequest(new {message="failed to add new business",error});
         }
         
     }

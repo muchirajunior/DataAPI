@@ -3,7 +3,10 @@ using System.Text;
 using System.Text.Json.Serialization;
 using DataAPI;
 using DataAPI.Services;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -54,9 +57,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
                 context.Fail("Invaild Security Stamp");
             }
             //and any other checks for user
-        }
+        },
+        // OnAuthenticationFailed = async context =>{
+        //     if(!context.HttpContext.Response.HasStarted){
+        //       await context.HttpContext.Response.WriteAsJsonAsync(new {message="UnAuthorized Access"});
+        //     }
+           
+        // }        
     };
+    options.IncludeErrorDetails = true;
 });
+
+builder.Services.AddHealthChecks()
+    // .AddNpgSql(Configuration.GetConnectionString("DatabaseConnection")!)
+    .AddSqlite(Configuration.GetConnectionString("DatabaseConnection")!,healthQuery:"select * from users where id='1'" );
+
 
 builder.Services.AddScoped<IUserService,UserServices>();
 // builder.Services.AddScoped<IAuthService,AuthService>();
@@ -71,9 +86,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
-
 app.UseHttpsRedirection();
+
+app.MapHealthChecks(
+    "/health", new HealthCheckOptions {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    }
+);
 
 app.UseCors();
 
