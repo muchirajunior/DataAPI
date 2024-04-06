@@ -4,9 +4,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAPI ;
 public class DatabaseContext : DbContext {
-    public DatabaseContext() { }
-    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base (options) { }
-   
+    private readonly IConfiguration configuration;
+
+    public DatabaseContext(IConfiguration configuration){
+        this.configuration = configuration;
+    }
+
+    public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration configuration) : base (options){
+        this.configuration = configuration;
+    }
+    
     public DbSet<Product> Products { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Business> Businesses { get; set; }
@@ -16,9 +23,10 @@ public class DatabaseContext : DbContext {
     public DbSet<OrderProduct> OrderProducts { get; set; } //junction table
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){
-        optionsBuilder.UseSqlite("Data Source=Database.db;"); // Replace with your actual connection string
+        if (!optionsBuilder.IsConfigured){
+            optionsBuilder.UseSqlite(configuration.GetConnectionString("DatabaseConnection"));
+        }
     }
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder){
         

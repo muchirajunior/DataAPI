@@ -6,7 +6,6 @@ using DataAPI.Services;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -21,8 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DatabaseContext>(options=>
-options.UseSqlite(Configuration.GetConnectionString("DatabaseConnection")));
+builder.Services.AddDbContext<DatabaseContext>();
 
 builder.Services.AddDistributedMemoryCache();
 
@@ -49,7 +47,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         };
     options.Events = new JwtBearerEvents{
         OnTokenValidated = async context =>{
-            DatabaseContext _context = new DatabaseContext();
+            DatabaseContext _context = new DatabaseContext(configuration: Configuration!);
             var email = context.Principal!.FindFirstValue(ClaimTypes.Email);
             var securityStamp = context.Principal!.FindFirstValue(ClaimTypes.SerialNumber); // use the claim for security stamp
             var user = await _context.Users.Where((user)=>user.Email == email).FirstOrDefaultAsync();
